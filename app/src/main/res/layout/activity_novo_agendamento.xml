@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Novo Agendamento"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data do Carregamento:"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnSelecionarData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clique para escolher a data"
+            android:backgroundTint="#E0E0E0"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Horário:"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerHorarios"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/editEmpresa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome da Empresa / Motorista"
+            android:inputType="text"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resíduos para Carregar:"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Botão para abrir a lista de resíduos -->
+        <Button
+            android:id="@+id/btnAdicionarResiduo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ Adicionar Resíduo"
+            android:backgroundTint="#FF9800"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Lista visual dos resíduos selecionados -->
+        <LinearLayout
+            android:id="@+id/layoutResiduosSelecionados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/btnSalvarAgendamento"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Salvar Agendamento"
+            android:textSize="18sp"
+            android:backgroundTint="#4CAF50"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="#E3F2FD"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/txtHorarioCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="08:30"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1565C0"
+        android:layout_marginEnd="16dp"/>
+
+    <TextView
+        android:id="@+id/txtEmpresaCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Nome da Empresa"
+        android:textSize="16sp"
+        android:textColor="#333333"/>
+
+    <!-- Botão para abrir os detalhes e concluir/cancelar -->
+    <Button
+        android:id="@+id/btnAbrirAgendamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abrir"
+        android:textSize="12sp"
+        android:minHeight="40dp"
+        android:backgroundTint="#FF9800"/>
+</LinearLayout>
