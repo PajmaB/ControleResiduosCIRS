@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,12 +13,12 @@
         android:text="Menu Principal"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/btnIrEstoque"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:text="Estoque de Resíduos"
         android:textSize="18sp"
         android:layout_marginBottom="16dp"/>
@@ -25,10 +26,18 @@
     <Button
         android:id="@+id/btnIrAgendamentos"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:text="Agendamentos"
         android:textSize="18sp"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnIrHistorico"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:text="Histórico de Carregamentos"
+        android:textSize="18sp"
+        android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/btnSair"
