@@ -24,6 +24,10 @@ public class DetalheAgendamentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhe_agendamento);
+        // Ativa a seta de voltar na barra superior
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         txtNomeEmpresaDetalhe = findViewById(R.id.txtNomeEmpresaDetalhe);
         btnConcluido = findViewById(R.id.btnConcluido);
@@ -82,5 +86,10 @@ public class DetalheAgendamentoActivity extends AppCompatActivity {
         );
 
         queue.add(request);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Destrói a tela atual e revela a tela anterior que estava embaixo
+        return true;
     }
 }

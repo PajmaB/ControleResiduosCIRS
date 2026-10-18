@@ -40,6 +40,10 @@ public class NovoAgendamentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_agendamento);
+        // Ativa a seta de voltar na barra superior
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         btnSelecionarData = findViewById(R.id.btnSelecionarData);
         spinnerHorarios = findViewById(R.id.spinnerHorarios);
@@ -59,6 +63,12 @@ public class NovoAgendamentoActivity extends AppCompatActivity {
 
         // Botão final para salvar
         btnSalvarAgendamento.setOnClickListener(v -> salvarAgendamentoNoBanco());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Destrói a tela atual e revela a tela anterior que estava embaixo
+        return true;
     }
 
     private void configurarHorarios() {

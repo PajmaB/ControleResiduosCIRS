@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,28 +24,38 @@ public class AlterarQuantidadeActivity extends AppCompatActivity {
     Button btnConfirmarAlteracao;
     ItemResiduo residuo;
 
-    // Array para guardar as variações de cada tipo de armazenagem
+    // Arrays separados: um para armazenar números (+ e -) e outro para armazenar os textos de volume
     int[] variacoes;
+    String[] niveisSelecionados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alterar_quantidade);
+        // Ativa a seta de voltar na barra superior
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         txtTituloResiduo = findViewById(R.id.txtTituloResiduo);
         layoutControles = findViewById(R.id.layoutControles);
         btnConfirmarAlteracao = findViewById(R.id.btnConfirmarAlteracao);
 
-        // Recebe o objeto da tela anterior
         residuo = (ItemResiduo) getIntent().getSerializableExtra("residuoSelecionado");
 
         if (residuo != null) {
             txtTituloResiduo.setText("Alterar: " + residuo.nome);
             variacoes = new int[residuo.armazenagens.size()];
+            niveisSelecionados = new String[residuo.armazenagens.size()];
             montarControlesNaTela();
         }
 
         btnConfirmarAlteracao.setOnClickListener(v -> salvarAlteracoes());
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Destrói a tela atual e revela a tela anterior que estava embaixo
+        return true;
     }
 
     private void montarControlesNaTela() {
@@ -51,47 +63,77 @@ public class AlterarQuantidadeActivity extends AppCompatActivity {
 
         for (int i = 0; i < residuo.armazenagens.size(); i++) {
             Armazenagem arm = residuo.armazenagens.get(i);
-            final int index = i; // Necessário para usar dentro dos cliques
+            final int index = i;
 
-            // Infla (desenha) o bloquinho de controle
-            View viewControle = inflater.inflate(R.layout.item_controle_quantidade, layoutControles, false);
+            // Salva o nível inicial para sabermos se o usuário alterou algo
+            niveisSelecionados[index] = arm.prioridade;
 
-            TextView txtTipoAtual = viewControle.findViewById(R.id.txtTipoAtual);
-            TextView txtVariacao = viewControle.findViewById(R.id.txtVariacao);
-            Button btnMenos = viewControle.findViewById(R.id.btnMenos);
-            Button btnMais = viewControle.findViewById(R.id.btnMais);
+            // REGRA: Se o tipo conter a palavra "volume" (ex: Volume, Volume Combo)
+            if (arm.tipo.toLowerCase().contains("volume")) {
+                View viewControle = inflater.inflate(R.layout.item_controle_volume, layoutControles, false);
 
-            txtTipoAtual.setText(arm.tipo + " (Atual: " + arm.quantidade + ")");
+                TextView txtTipo = viewControle.findViewById(R.id.txtTipoAtualVolume);
+                RadioGroup radioGroup = viewControle.findViewById(R.id.radioGroupVolume);
+                RadioButton radioBaixo = viewControle.findViewById(R.id.radioBaixo);
+                RadioButton radioMedio = viewControle.findViewById(R.id.radioMedio);
+                RadioButton radioAlto = viewControle.findViewById(R.id.radioAlto);
 
-            btnMais.setOnClickListener(v -> {
-                variacoes[index]++;
-                atualizarTextoVariacao(txtVariacao, variacoes[index]);
-            });
+                txtTipo.setText(arm.tipo + " (Atual: " + arm.prioridade + ")");
 
-            btnMenos.setOnClickListener(v -> {
-                // Evita que a pessoa tente subtrair mais do que existe no estoque
-                if ((arm.quantidade + variacoes[index]) > 0) {
-                    variacoes[index]--;
+                // Marca a bolinha certa baseado em como o estoque está agora
+                if (arm.prioridade.equals("ALTA")) radioAlto.setChecked(true);
+                else if (arm.prioridade.equals("MEDIA")) radioMedio.setChecked(true);
+                else radioBaixo.setChecked(true);
+
+                // Escuta quando o usuário clica em uma bolinha diferente
+                radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                    if (checkedId == R.id.radioAlto) niveisSelecionados[index] = "ALTA";
+                    else if (checkedId == R.id.radioMedio) niveisSelecionados[index] = "MEDIA";
+                    else niveisSelecionados[index] = "BAIXA";
+                });
+
+                layoutControles.addView(viewControle);
+
+            } else {
+                // SE NÃO FOR VOLUME, MONTA O LAYOUT DE + E - (Padrão)
+                View viewControle = inflater.inflate(R.layout.item_controle_quantidade, layoutControles, false);
+
+                TextView txtTipoAtual = viewControle.findViewById(R.id.txtTipoAtual);
+                TextView txtVariacao = viewControle.findViewById(R.id.txtVariacao);
+                Button btnMenos = viewControle.findViewById(R.id.btnMenos);
+                Button btnMais = viewControle.findViewById(R.id.btnMais);
+
+                txtTipoAtual.setText(arm.tipo + " (Atual: " + arm.quantidade + ")");
+
+                btnMais.setOnClickListener(v -> {
+                    variacoes[index]++;
                     atualizarTextoVariacao(txtVariacao, variacoes[index]);
-                } else {
-                    Toast.makeText(this, "Estoque não pode ficar negativo", Toast.LENGTH_SHORT).show();
-                }
-            });
+                });
 
-            layoutControles.addView(viewControle);
+                btnMenos.setOnClickListener(v -> {
+                    if ((arm.quantidade + variacoes[index]) > 0) {
+                        variacoes[index]--;
+                        atualizarTextoVariacao(txtVariacao, variacoes[index]);
+                    } else {
+                        Toast.makeText(this, "Estoque não pode ficar negativo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                layoutControles.addView(viewControle);
+            }
         }
     }
 
     private void atualizarTextoVariacao(TextView txtVariacao, int valor) {
         if (valor > 0) {
             txtVariacao.setText("+" + valor);
-            txtVariacao.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Verde
+            txtVariacao.setTextColor(android.graphics.Color.parseColor("#4CAF50"));
         } else if (valor < 0) {
             txtVariacao.setText(String.valueOf(valor));
-            txtVariacao.setTextColor(android.graphics.Color.parseColor("#EF5350")); // Vermelho
+            txtVariacao.setTextColor(android.graphics.Color.parseColor("#EF5350"));
         } else {
             txtVariacao.setText("0");
-            txtVariacao.setTextColor(android.graphics.Color.parseColor("#333333")); // Cinza/Preto
+            txtVariacao.setTextColor(android.graphics.Color.parseColor("#333333"));
         }
     }
 
@@ -101,22 +143,36 @@ public class AlterarQuantidadeActivity extends AppCompatActivity {
         boolean teveAlteracao = false;
 
         for (int i = 0; i < residuo.armazenagens.size(); i++) {
-            if (variacoes[i] != 0) {
-                teveAlteracao = true;
-                Armazenagem arm = residuo.armazenagens.get(i);
+            Armazenagem arm = residuo.armazenagens.get(i);
+            boolean isVolume = arm.tipo.toLowerCase().contains("volume");
+            boolean vaiAtualizar = false;
 
-                JSONObject jsonBody = new JSONObject();
-                try {
-                    jsonBody.put("id_residuo", arm.id_residuo);
-                    jsonBody.put("variacao", variacoes[i]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("id_residuo", arm.id_residuo);
+
+                if (isVolume) {
+                    // Verifica se a bolinha selecionada é diferente da original
+                    if (!niveisSelecionados[i].equals(arm.prioridade)) {
+                        vaiAtualizar = true;
+                        jsonBody.put("modo", "volume");
+                        jsonBody.put("nivel", niveisSelecionados[i]);
+                    }
+                } else {
+                    // Lógica original de variação numérica
+                    if (variacoes[i] != 0) {
+                        vaiAtualizar = true;
+                        jsonBody.put("variacao", variacoes[i]);
+                    }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+            if (vaiAtualizar) {
+                teveAlteracao = true;
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                        response -> {
-                            // Opcional: tratar sucesso individual
-                        },
+                        response -> { },
                         error -> Toast.makeText(this, "Erro ao atualizar: " + arm.tipo, Toast.LENGTH_SHORT).show()
                 );
                 queue.add(request);
@@ -125,10 +181,11 @@ public class AlterarQuantidadeActivity extends AppCompatActivity {
 
         if (teveAlteracao) {
             Toast.makeText(this, "Alterações enviadas!", Toast.LENGTH_SHORT).show();
-            finish(); // Fecha esta tela e volta para o Estoque
+            finish();
         } else {
             Toast.makeText(this, "Nenhuma alteração foi feita.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
+
 }

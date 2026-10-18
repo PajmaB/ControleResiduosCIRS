@@ -24,6 +24,10 @@ public class AgendamentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agendamento);
+        // Ativa a seta de voltar na barra superior
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         containerSegunda = findViewById(R.id.containerSegunda);
         containerTerca = findViewById(R.id.containerTerca);
@@ -32,6 +36,12 @@ public class AgendamentoActivity extends AppCompatActivity {
         containerSexta = findViewById(R.id.containerSexta);
 
         buscarAgendamentos();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Destrói a tela atual e revela a tela anterior que estava embaixo
+        return true;
     }
 
     // Recarrega a lista toda vez que a tela volta a aparecer

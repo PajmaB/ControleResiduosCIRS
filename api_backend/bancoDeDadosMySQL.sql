@@ -62,16 +62,16 @@ INSERT INTO Estoque_residuos (nome_residuo, tipo_armazenagem, limite_medio, limi
 ('Reciclagem doação', 'Rack', 20, 25),
 ('Papelão', 'Fardo', 35, 38),
 ('Plástico filme', 'Fardo', 35, 38),
-('Doação', 'Fardo', 11, 16),
+('Reciclagem doação', 'Fardo', 11, 16),
 ('Massa líquida', 'IBC', 2, 2), -- Limite médio igual ao alto para forçar o pulo direto de Baixa para Alta
-('Plástico', 'Tambor', 40, 60),
-('Ferro', 'Tambor', 40, 60),
+('Tambor', 'Plástico', 40, 60),
+('Tambor', 'Ferro', 40, 60),
 ('Pó fábrica 2', 'Colméia', 3, 4),
 ('Casquinha moída', 'Bag', 20, 21),
 ('Descarte moinho', 'Volume', 4, 5),
 ('Papelão', 'Tubo', 4, 5),
-('Pallet', 'Volume Combo', 50, 100), -- Limite fictício (ajuste conforme necessário)
-('Balde', 'Volume Combo', 50, 100), -- Limite fictício (ajuste conforme necessário)
-('Bombonas', 'Volume Combo', 50, 100); -- Limite fictício (ajuste conforme necessário)
+('Pallet', 'Volume', 50, 100), -- Limite fictício (ajuste conforme necessário)
+('Balde', 'Volume', 50, 100), -- Limite fictício (ajuste conforme necessário)
+('Bombonas', 'Volume', 50, 100); -- Limite fictício (ajuste conforme necessário)
 
 INSERT INTO usuários ( nome, login, senha ) VALUES ('teste','adm1','123654'), ('teste2','adm2','456321');

@@ -25,6 +25,10 @@ public class EstoqueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estoque);
+        // Ativa a seta de voltar na barra superior
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         recyclerEstoque = findViewById(R.id.recyclerEstoque);
         recyclerEstoque.setLayoutManager(new LinearLayoutManager(this));
@@ -35,6 +39,7 @@ public class EstoqueActivity extends AppCompatActivity {
 
         buscarDadosEstoque();
     }
+
 
     @Override
     protected void onResume() {
@@ -87,5 +92,11 @@ public class EstoqueActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Destrói a tela atual e revela a tela anterior que estava embaixo
+        return true;
     }
 }
